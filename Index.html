@@ -1,0 +1,306 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+  <script src="bigDOODOO.js"></script>
+  <style>    .window {
+      position: absolute;
+      width: 500px;
+      height: 500px;
+      background-color: #091E89;
+      overflow: hidden;
+      border-radius: 7px 7px 0 0;
+      z-index: 100;
+      top: 10%;
+      left: 40%;
+      display: none;
+      box-sizing: border-box;
+      min-width: 200px;
+    }
+    .resize-e, .resize-w {
+      position: absolute;
+      width: 10px;
+      height: 190px;
+      top: 5px;
+    }
+    .resize-w {
+      left: -5px;
+      cursor: w-resize;
+    }
+    .resize-e {
+      right: -5px;
+      cursor: e-resize;
+    }
+    .resize-n, .resize-s {
+      position: absolute;
+      width: calc(200px - 10px);
+      height: 10px;
+      left: 5px;
+    }
+    .resize-s {
+      bottom: -5px;
+      cursor: s-resize;
+    }
+    .resize-n {
+      top: -5px;
+      cursor: n-resize;
+    }
+    .resize-ne, .resize-nw, .resize-se, .resize-sw {
+      position: absolute;
+      width: 10px;
+      height: 10px;
+    }
+    .resize-ne { cursor: ne-resize; }
+    .resize-sw { cursor: sw-resize; }
+    .resize-nw { cursor: nw-resize; }
+    .resize-se { cursor: se-resize; }
+    .resize-nw, .resize-ne { top: -5px; }
+    .resize-ne, .resize-se { right: 0px; }
+    .resize-sw, .resize-se { bottom: -5px; }
+
+    .title-bar {
+      width: 500px;
+      height: 35px;
+      background: linear-gradient(to bottom, #4094ff 0%, #0056e4 13%, #0056e4 71%, #16428b 100%);
+      box-sizing: border-box;
+    }
+    .title-bar .title-bar-title {
+      position: absolute;
+      top: 7.5px;
+      left: 7.5px;
+      color: white;
+      text-shadow: 1px 1px #10397E;
+      font-size: 15px;
+      pointer-events: none;
+    }
+    .title-bar .title-bar-close, .title-bar .title-bar-max, .title-bar .title-bar-min {
+      position: absolute;
+      width: 20px;
+      height: 20px;
+      top: 5px;
+      right: 5px;
+      border-radius: 2px;
+      border: 1px solid white;
+      cursor: pointer;
+      pointer-events: auto;
+    }
+    .title-bar .title-bar-close {
+      background: linear-gradient(135deg, #F1A689 0%, #C0442A 50%, #C2311E 100%);
+    }
+    .title-bar-close:before, .title-bar-close:after {
+      content: '';
+      position: absolute;
+      width: 14px;
+      height: 2px;
+      background-color: white;
+      border-radius: 2px;
+      top: 9px;
+      box-shadow: 0 0 2px 0 #ccc;
+    }
+    .title-bar-close:before {
+      transform: rotate(45deg);
+      left: 3px;
+    }
+    .title-bar-close:after {
+      transform: rotate(-45deg);
+      right: 3px;
+    }
+    .title-bar .title-bar-max, .title-bar .title-bar-min {
+      background: linear-gradient(135deg, #7EAED6 0%, #1B72FF 50%, #1655BE 100%);
+    }
+    .title-bar .title-bar-max { right: 30px; }
+    .title-bar .title-bar-min { right: 55px; }
+    .title-bar-max:after, .title-bar-min:after {
+      content: '';
+      position: absolute;
+      box-shadow: 0 0 0px 0 #ccc;
+    }
+    .title-bar-max:after {
+      width: 10px;
+      height: 8px;
+      border: 1px solid white;
+      border-top: 3px solid white;
+      top: 4px;
+      left: 4px;
+    }
+    .title-bar-min:after {
+      width: 8px;
+      border-bottom: 2px solid white;
+      bottom: 4px;
+      left: 4px;
+    }
+
+.window .content {
+      position: absolute;
+      box-sizing: border-box;
+      padding: 0; 
+      height: calc(100% - 35px);
+      width: 100%;
+      left: 0;
+      bottom: 0;
+      background-color: white;
+      overflow: hidden;
+    }</style>
+</head>
+<body>
+
+  <div id="windows-container"></div>
+
+                <div class="start-menu-item intent-item" id="ie-icon">
+                <div class="icon" style="background-image:url('ie.png')"></div>
+                <div class="label">
+                  <div class="intent">Internet</div>
+                  <div class="program">Internet Explorer</div>
+                </div>
+              </div>
+  
+
+
+  <script>
+
+
+
+const ieHtml = `
+<div style="background-color: blue; height:100%; padding:10px;">
+  <p>penis</p>
+</div>
+`;
+
+function openWindow(title, content) {
+  const id = 'win-' + Date.now() + '-' + Math.random().toString(36).substr(2, 5);
+  const html = `
+    <div class="window" id="${id}" style="display:block; top:15%; left:35%;">
+      <div class="title-bar">
+        <div class="title-bar-title">${title}</div>
+        <div class="title-bar-close" onclick="$('#${id}').remove()"></div>
+        <div class="title-bar-max" onclick="$('#${id}').css({width:'100%',height:'calc(100% - 30px)',top:0,left:0}); $('#${id} .title-bar').css('width','100%'); $('#${id} .content').css({width:'calc(100% - 4px)',height:'calc(100% - 35px)'});"></div>
+        <div class="title-bar-min" onclick="$('#${id}').hide();"></div>
+      </div>
+      <div class="content">${content}</div>
+      <div class="resize-n"></div>
+      <div class="resize-e"></div>
+      <div class="resize-s"></div>
+      <div class="resize-w"></div>
+      <div class="resize-ne"></div>
+      <div class="resize-nw"></div>
+      <div class="resize-se"></div>
+      <div class="resize-sw"></div>
+    </div>
+  `;
+  $('#windows-container').append(html);
+
+  $('.window').css('z-index', 100);
+  $('#' + id).css('z-index', 101);
+}
+
+$('#ie-icon').on('click', function() {
+  openWindow('Internet Explorer', ieHtml);
+});
+
+      var mouseIsDown = false,
+      offsetX = 10,
+      offsetY = 10,
+      resizeDir = false,
+      minWidth = 200,
+      minHeight = 200,
+      activeWindow = null;
+
+  $(document).on("mousedown", ".title-bar, .resize-s, .resize-se, .resize-e, .resize-w, .resize-n, .resize-sw, .resize-nw, .resize-ne", function(e) {
+    if($(e.target).hasClass('title-bar-close') || $(e.target).hasClass('title-bar-max') || $(e.target).hasClass('title-bar-min')) return;
+
+    offsetX = e.offsetX;
+    offsetY = e.offsetY;
+    mouseIsDown = true;
+    resizeDir = $(e.target).attr("class");
+    activeWindow = $(e.target).closest(".window");
+
+    $('.window').css('z-index', 100);
+    activeWindow.css('z-index', 101);
+  });
+
+  $(window).mouseup(function(e) {
+    mouseIsDown = false;
+  });
+
+  $(window).mousemove(function(e) {
+    if (mouseIsDown && activeWindow) {
+      var newWidth, newHeight, newX, newY;
+      var winOffset = activeWindow.offset();
+      var winWidth = activeWindow.width();
+      var winHeight = activeWindow.height();
+
+      if (resizeDir === "title-bar") {
+        newX = e.pageX - offsetX;
+        newY = e.pageY - offsetY;
+
+        if(newY < 0) newY = 0;
+        if(newY > $(window).height() - 50) newY = $(window).height() - 50;
+        if(newX < -winWidth + 50) newX = -winWidth + 50;
+        if(newX > $(window).width() - 50) newX = $(window).width() - 50;
+
+        activeWindow.css({ left: newX, top: newY });
+      } else {
+        if (resizeDir.indexOf("e") > -1) {
+          newWidth = e.pageX - winOffset.left;
+          if (newWidth < minWidth) newWidth = minWidth;
+        }
+        if (resizeDir.indexOf("s") > -1) {
+          newHeight = e.pageY - winOffset.top;
+          if (newHeight < minHeight) newHeight = minHeight;
+        }
+        if (resizeDir.indexOf("w") > -1) {
+          newWidth = winWidth + (winOffset.left - e.pageX);
+          newX = e.pageX;
+          if (newWidth < minWidth) {
+            newWidth = minWidth;
+            newX = winOffset.left;
+          }
+        }
+        if (resizeDir.indexOf("n") > -1) {
+          newHeight = winHeight + (winOffset.top - e.pageY);
+          newY = e.pageY;
+          if (newHeight < minHeight) {
+            newHeight = minHeight;
+            newY = winOffset.top;
+          }
+        }
+
+        if (newWidth) {
+          activeWindow.find(".title-bar").css({ width: newWidth });
+          activeWindow.find(".content").css({ width: newWidth - 4 });
+          activeWindow.css({ width: newWidth });
+        }
+        if (newHeight) {
+          activeWindow.find(".content").css({ height: newHeight - 35 });
+          activeWindow.css({ height: newHeight });
+        }
+        if (newX !== undefined) activeWindow.css({ left: newX });
+        if (newY !== undefined) activeWindow.css({ top: newY });
+
+        activeWindow.find(".resize-e, .resize-w").css({ height: winHeight - 10 });
+        activeWindow.find(".resize-s, .resize-n").css({ width: winWidth - 10 });
+      }
+    }
+  });
+
+  $(window).resize(function() {
+    var screenW = $(window).width();
+    var screenH = $(window).height();
+    $('.window').each(function() {
+      var $win = $(this);
+      var pos = $win.offset();
+      var w = $win.width();
+      var h = $win.height();
+      if(pos.left + w > screenW) {
+        $win.css('left', Math.max(0, screenW - w - 10));
+      }
+      if(pos.top + h > screenH) {
+        $win.css('top', Math.max(0, screenH - h - 40));
+      }
+    });
+  });
+  </script>
+</body>
+</html>
